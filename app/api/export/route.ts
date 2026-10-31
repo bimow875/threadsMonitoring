@@ -5,6 +5,7 @@ import { MentionStatus, InputSourceType } from "@prisma/client";
 import { sanitizeFormulaInjection } from "@/lib/export/sanitize";
 import { escapeHtml, safeHttpsUrl } from "@/lib/security/escapeHtml";
 import ExcelJS from "exceljs";
+import { generatePptxReport } from "@/lib/export/pptx";
 
 export const dynamic = "force-dynamic";
 
@@ -155,7 +156,28 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    // 3. FORMAT PDF / PRINTABLE HTML (AC-13: judul, rentang tanggal, filter aktif, ringkasan angka, tabel)
+    // 3. FORMAT POWERPOINT (.pptx)
+    if (format === "pptx" || format === "powerpoint" || format === "ppt") {
+      const buffer = await generatePptxReport(mentions as any, {
+        startDate: startDateParam,
+        endDate: endDateParam,
+        topik,
+        sentimen: sentimenParam,
+        includeSample,
+      });
+      const filename = `Laporan_ThreadsMonitoring_BTN_${timestamp}.pptx`;
+
+      return new NextResponse(Buffer.from(buffer), {
+        status: 200,
+        headers: {
+          "Content-Type":
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+          "Content-Disposition": `attachment; filename="${filename}"`,
+        },
+      });
+    }
+
+    // 4. FORMAT PDF / PRINTABLE HTML (AC-13: judul, rentang tanggal, filter aktif, ringkasan angka, tabel)
     if (format === "pdf" || format === "html") {
       const totalCount = mentions.length;
       const positifCount = mentions.filter(

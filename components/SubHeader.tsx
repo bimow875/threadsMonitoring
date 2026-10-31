@@ -32,7 +32,7 @@ export function SubHeader() {
 
   const dateOptions = getPresetDateRanges();
 
-  const handleExport = (format: "csv" | "xlsx" | "pdf") => {
+  const handleExport = (format: "csv" | "xlsx" | "pdf" | "pptx") => {
     setIsExportOpen(false);
     const params = new URLSearchParams({
       format: format,
@@ -141,6 +141,12 @@ export function SubHeader() {
                 className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-50"
               >
                 <span>Laporan Excel (.xlsx)</span>
+              </button>
+              <button
+                onClick={() => handleExport("pptx")}
+                className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs font-semibold text-slate-700 transition-colors hover:bg-slate-50"
+              >
+                <span>Laporan PowerPoint (.pptx)</span>
               </button>
               <button
                 onClick={() => handleExport("pdf")}

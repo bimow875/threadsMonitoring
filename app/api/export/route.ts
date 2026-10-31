@@ -5,7 +5,7 @@ import { MentionStatus, InputSourceType } from "@prisma/client";
 import { sanitizeFormulaInjection } from "@/lib/export/sanitize";
 import { escapeHtml, safeHttpsUrl } from "@/lib/security/escapeHtml";
 import ExcelJS from "exceljs";
-import { generatePptxReport } from "@/lib/export/pptx";
+import { generatePptxReport, MentionExportData } from "@/lib/export/pptx";
 
 export const dynamic = "force-dynamic";
 
@@ -158,7 +158,7 @@ export async function GET(req: NextRequest) {
 
     // 3. FORMAT POWERPOINT (.pptx)
     if (format === "pptx" || format === "powerpoint" || format === "ppt") {
-      const buffer = await generatePptxReport(mentions as any, {
+      const buffer = await generatePptxReport(mentions as MentionExportData[], {
         startDate: startDateParam,
         endDate: endDateParam,
         topik,

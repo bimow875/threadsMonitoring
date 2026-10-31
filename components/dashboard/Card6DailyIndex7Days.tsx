@@ -13,8 +13,9 @@ interface Card6Props {
 }
 
 export function Card6DailyIndex7Days({ daily7Days }: Card6Props) {
-  const maxCount = Math.max(1, ...daily7Days.map((d) => d.count));
-  const sevenDayTotal = daily7Days.reduce((acc, curr) => acc + curr.count, 0);
+  const safeDaily7Days = Array.isArray(daily7Days) ? daily7Days : [];
+  const maxCount = Math.max(1, ...safeDaily7Days.map((d) => d.count));
+  const sevenDayTotal = safeDaily7Days.reduce((acc, curr) => acc + curr.count, 0);
 
   return (
     <div className="flex flex-col justify-between rounded-[28px] border border-slate-100 bg-white p-6 shadow-sm lg:col-span-3">
@@ -28,7 +29,7 @@ export function Card6DailyIndex7Days({ daily7Days }: Card6Props) {
       </div>
 
       <div className="my-4 flex h-24 items-end justify-between px-3">
-        {daily7Days.map((item, idx) => {
+        {safeDaily7Days.map((item, idx) => {
           const heightPx = Math.max(
             24,
             Math.round((item.count / maxCount) * 64)

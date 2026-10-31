@@ -19,7 +19,7 @@ export function Card5TopTopicFocus({ topTopic }: Card5Props) {
 
       <div className="flex items-center justify-between">
         <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-[#0055FF]">
-          {Math.round(topTopic.percentage)}% Porsi Topik
+          {Math.round(topTopic?.percentage || 0)}% Porsi Topik
         </span>
         <span className="text-xs font-bold uppercase text-white/80">
           Topik Teratas
@@ -40,7 +40,7 @@ export function Card5TopTopicFocus({ topTopic }: Card5Props) {
           Fokus Pembicaraan Utama
         </p>
         <p className="mt-0.5 text-4xl font-normal tracking-tight text-white">
-          {topTopic.nama}
+          {topTopic?.nama || "Belum Ada Data"}
         </p>
       </div>
     </div>

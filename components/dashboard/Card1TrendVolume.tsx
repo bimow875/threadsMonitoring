@@ -36,8 +36,9 @@ export function Card1TrendVolume({
   const { selectedTopic, setSelectedTopic } = useApp();
   const [showTable, setShowTable] = useState(false);
 
-  const maxCount = Math.max(1, ...trendBars.map((b) => b.count));
-  const hasData = totalMentions > 0 && trendBars.some((b) => b.count > 0);
+  const safeTrendBars = Array.isArray(trendBars) ? trendBars : [];
+  const maxCount = Math.max(1, ...safeTrendBars.map((b) => b.count));
+  const hasData = (totalMentions || 0) > 0 && safeTrendBars.some((b) => b.count > 0);
 
   return (
     <div className="flex flex-col justify-between rounded-[28px] border border-slate-100 bg-white p-6 shadow-sm lg:col-span-7">
@@ -113,7 +114,7 @@ export function Card1TrendVolume({
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {trendBars.map((b) => (
+              {safeTrendBars.map((b) => (
                 <tr key={b.label}>
                   <td className="p-2 font-medium text-slate-700">{b.label}</td>
                   <td className="p-2 font-bold text-[#0A192F]">{b.count}</td>
@@ -149,7 +150,7 @@ export function Card1TrendVolume({
           aria-label={`Grafik tren volume mention dengan total ${totalMentions} mention dan ${negativeCount} isu negatif.`}
           className="my-6 flex h-36 items-end justify-between gap-2 px-2"
         >
-          {trendBars.map((b) => {
+          {safeTrendBars.map((b) => {
             // Tinggi batang minimum 4px untuk nilai > 0
             const heightPercent =
               b.count > 0 ? Math.max(5, (b.count / maxCount) * 100) : 0;
